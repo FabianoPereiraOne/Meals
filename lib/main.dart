@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:meals/screens/CategoryScreen.dart';
-import 'package:meals/screens/categories.dart';
-import 'package:meals/screens/mealDetailScreen.dart';
+import 'package:meals/screens/Category.dart';
+import 'package:meals/screens/mealDetail.dart';
+import 'package:meals/screens/settings.dart';
+import 'package:meals/screens/tabs.dart';
 import 'package:meals/utils/appRoutes.dart';
 
 void main() => runApp(Meals());
@@ -23,17 +24,18 @@ class Meals extends StatelessWidget {
           titleTextStyle: TextStyle(
             fontSize: 20,
             fontFamily: "Raleway",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
+        primaryColor: Colors.blue,
         fontFamily: "Raleway",
         colorScheme: ColorScheme(
-          primary: Colors.blue,
+          primary: Colors.white,
           brightness: Brightness.light,
           onPrimary: Colors.blue,
-          secondary: Colors.green,
-          onSecondary: Colors.green,
+          secondary: Color.fromRGBO(34, 242, 187, 1),
+          onSecondary: Color.fromRGBO(34, 242, 187, 1),
           error: Colors.red,
           onError: Colors.red,
           surface: Color.fromRGBO(255, 254, 229, 1),
@@ -49,20 +51,21 @@ class Meals extends StatelessWidget {
           bodyMedium: TextStyle(
             fontSize: 18,
             fontFamily: "RobotoCondensed",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w400,
             color: Colors.black87,
           ),
         ),
       ),
       routes: {
-        AppRoutes.HOME: (ctx) => CategoriesScreen(),
+        AppRoutes.HOME: (ctx) => TabsScreen(),
         AppRoutes.CATEGORIES_MEALS: (ctx) => CategoryScreen(),
         AppRoutes.MEAL_DETAILS: (ctx) => MealDetailScreen(),
+        AppRoutes.SETTINGS: (ctx) => SettingsScreen(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (_) {
-            return CategoriesScreen();
+            return TabsScreen();
           },
         );
       },

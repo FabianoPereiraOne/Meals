@@ -8,7 +8,7 @@ class MealDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final meal = ModalRoute.of(context)?.settings.arguments as Meal;
 
-    Widget _createSectionTitle(IconData icon, Widget child) {
+    Widget createSectionTitle(IconData icon, Widget child) {
       return Container(
         width: double.infinity,
         margin: EdgeInsets.only(top: 24),
@@ -20,7 +20,7 @@ class MealDetailScreen extends StatelessWidget {
       );
     }
 
-    Widget _createSectionContainer(Widget child) {
+    Widget createSectionContainer(Widget child) {
       return Container(
         margin: EdgeInsets.only(top: 16),
         width: 330,
@@ -45,7 +45,7 @@ class MealDetailScreen extends StatelessWidget {
               height: 250,
               child: Image.network(meal.imageUrl, fit: BoxFit.cover),
             ),
-            _createSectionTitle(
+            createSectionTitle(
               Icons.local_grocery_store,
               Text(
                 "Ingredientes",
@@ -53,7 +53,7 @@ class MealDetailScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
-            _createSectionContainer(
+            createSectionContainer(
               ListView.builder(
                 itemCount: meal.ingredients.length,
                 itemBuilder: (ctx, index) {
@@ -76,7 +76,7 @@ class MealDetailScreen extends StatelessWidget {
                 },
               ),
             ),
-            _createSectionTitle(
+            createSectionTitle(
               Icons.format_list_numbered,
               Text(
                 "Passo a passo",
@@ -84,7 +84,7 @@ class MealDetailScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
-            _createSectionContainer(
+            createSectionContainer(
               ListView.builder(
                 itemCount: meal.steps.length,
                 itemBuilder: (ctx, index) {
@@ -92,6 +92,7 @@ class MealDetailScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         leading: CircleAvatar(
+                          backgroundColor: Colors.blue,
                           child: Text(
                             "${index + 1}",
                             textAlign: TextAlign.center,
@@ -120,6 +121,10 @@ class MealDetailScreen extends StatelessWidget {
             SizedBox(height: 40),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.favorite_border),
       ),
     );
   }
