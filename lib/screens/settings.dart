@@ -3,20 +3,29 @@ import 'package:meals/components/sidebar.dart';
 import 'package:meals/models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final Function(Settings) onChangedSettings;
+  final Settings settings;
+
+  const SettingsScreen(this.settings, this.onChangedSettings, {super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final settings = Settings();
+  late Settings settings;
+
+  @override
+  void initState() {
+    super.initState();
+    settings = widget.settings;
+  }
 
   Widget createSwitch(
     String title,
     String subtitle,
     bool value,
-    Function(bool value) onChanged,
+    Function(bool) onChanged,
   ) {
     return SwitchListTile.adaptive(
       title: Text(
@@ -36,7 +45,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       value: value,
-      onChanged: onChanged,
+      onChanged: (value) {
+        onChanged(value);
+        widget.onChangedSettings(settings);
+      },
       activeColor: Colors.blue,
       inactiveThumbColor: Colors.white,
       inactiveTrackColor: Colors.black12,
