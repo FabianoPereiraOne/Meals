@@ -58,7 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Configurações")),
+      appBar: AppBar(title: Text("Filtros")),
       drawer: Sidebar(),
       body: Column(
         children: [

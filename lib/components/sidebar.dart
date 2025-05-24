@@ -38,12 +38,12 @@ class Sidebar extends StatelessWidget {
           SizedBox(height: 16),
           _linkRow(
             Icons.restaurant,
-            "Refeições",
+            "Categorias",
             () => Navigator.of(context).pushReplacementNamed(AppRoutes.HOME),
           ),
           _linkRow(
-            Icons.settings,
-            "Configurações",
+            Icons.filter_list,
+            "Filtros",
             () =>
                 Navigator.of(context).pushReplacementNamed(AppRoutes.SETTINGS),
           ),

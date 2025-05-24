@@ -11,9 +11,10 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final category = ModalRoute.of(context)?.settings.arguments as Category;
+
     final listMeals =
         meals.where((meal) {
-          return meal.categories.contains(category.id);
+          return meal.categories.contains(category.title);
         }).toList();
 
     return Scaffold(

@@ -1,6 +1,18 @@
+import 'dart:convert';
+
 enum Complexity { simple, medium, difficult }
 
 enum Cost { cheap, fair, expensive }
+
+extension ComplexityExtension on Complexity {
+  int get value => index;
+  static Complexity fromInt(int value) => Complexity.values[value];
+}
+
+extension CostExtension on Cost {
+  int get value => index;
+  static Cost fromInt(int value) => Cost.values[value];
+}
 
 class Meal {
   final String id;
@@ -32,6 +44,42 @@ class Meal {
     required this.complexity,
     required this.cost,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'categories': jsonEncode(categories),
+      'title': title,
+      'imageUrl': imageUrl,
+      'ingredients': jsonEncode(ingredients),
+      'steps': jsonEncode(steps),
+      'duration': duration,
+      'isGlutenFree': isGlutenFree ? 1 : 0,
+      'isLactoseFree': isLactoseFree ? 1 : 0,
+      'isVegan': isVegan ? 1 : 0,
+      'isVegetarian': isVegetarian ? 1 : 0,
+      'complexity': complexity.index,
+      'cost': cost.index,
+    };
+  }
+
+  factory Meal.fromMap(Map<String, dynamic> map) {
+    return Meal(
+      id: map['id'],
+      categories: List<String>.from(jsonDecode(map['categories'])),
+      title: map['title'],
+      imageUrl: map['imageUrl'],
+      ingredients: List<String>.from(jsonDecode(map['ingredients'])),
+      steps: List<String>.from(jsonDecode(map['steps'])),
+      duration: map['duration'],
+      isGlutenFree: map['isGlutenFree'] == 1,
+      isLactoseFree: map['isLactoseFree'] == 1,
+      isVegan: map['isVegan'] == 1,
+      isVegetarian: map['isVegetarian'] == 1,
+      complexity: ComplexityExtension.fromInt(map['complexity']),
+      cost: CostExtension.fromInt(map['cost']),
+    );
+  }
 
   String get complexityText {
     switch (complexity) {

@@ -1,12 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 
-class MealDetailScreen extends StatelessWidget {
-  const MealDetailScreen({super.key});
+import '../helper/database.dart';
+
+class MealDetailScreen extends StatefulWidget {
+  final Function(bool? isFav, Meal? meal, Function() checkIfFavorite)
+  onSelectMealFavorite;
+  const MealDetailScreen(this.onSelectMealFavorite, {super.key});
+
+  @override
+  State<MealDetailScreen> createState() => _MealDetailScreenState();
+}
+
+class _MealDetailScreenState extends State<MealDetailScreen> {
+  Meal? meal;
+  bool? isFav;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // ignore: unnecessary_null_comparison
+    if (meal == null) {
+      meal = ModalRoute.of(context)!.settings.arguments as Meal;
+      _checkIfFavorite();
+    }
+  }
+
+  void _checkIfFavorite() async {
+    final favorite = await DBHelper.isFavorite(meal!.id);
+    setState(() {
+      isFav = favorite;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final meal = ModalRoute.of(context)?.settings.arguments as Meal;
+    if (meal == null || isFav == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Carregando...',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     Widget createSectionTitle(IconData icon, Widget child) {
       return Container(
@@ -36,14 +75,14 @@ class MealDetailScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(meal.title)),
+      appBar: AppBar(title: Text(meal!.title)),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
               width: double.infinity,
               height: 250,
-              child: Image.network(meal.imageUrl, fit: BoxFit.cover),
+              child: Image.network(meal!.imageUrl, fit: BoxFit.cover),
             ),
             createSectionTitle(
               Icons.local_grocery_store,
@@ -55,7 +94,7 @@ class MealDetailScreen extends StatelessWidget {
             ),
             createSectionContainer(
               ListView.builder(
-                itemCount: meal.ingredients.length,
+                itemCount: meal!.ingredients.length,
                 itemBuilder: (ctx, index) {
                   return Card(
                     color: Colors.amber,
@@ -65,7 +104,7 @@ class MealDetailScreen extends StatelessWidget {
                         horizontal: 10,
                       ),
                       child: Text(
-                        "${meal.ingredients[index]}",
+                        "${meal!.ingredients[index]}",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -86,25 +125,13 @@ class MealDetailScreen extends StatelessWidget {
             ),
             createSectionContainer(
               ListView.builder(
-                itemCount: meal.steps.length,
+                itemCount: meal!.steps.length,
                 itemBuilder: (ctx, index) {
                   return Column(
                     children: [
                       ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          child: Text(
-                            "${index + 1}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
                         title: Text(
-                          meal.steps[index],
+                          meal!.steps[index],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -123,8 +150,9 @@ class MealDetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.favorite_border),
+        onPressed:
+            () => widget.onSelectMealFavorite(isFav, meal, _checkIfFavorite),
+        child: Icon(isFav! ? Icons.favorite : Icons.favorite_border),
       ),
     );
   }
