@@ -1,5 +1,5 @@
 name: meals
-description: "A new Flutter project."
+description: "Uma app que lista variadades de receitas"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -34,10 +34,12 @@ dependencies:
   path: ^1.8.3
   http: ^1.4.0
   flutter_launcher_icons: ^0.13.1
+  connectivity_plus: ^6.0.3
 
-flutter_icons:
-  android: true
+flutter_launcher_icons:
+  android: "launcher_icon"
   ios: true
+  remove_alpha_ios: true
   image_path: "assets/icon.png"
 
   # The following adds the Cupertino Icons font to your application.

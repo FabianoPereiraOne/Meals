@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:meals/helper/database.dart';
@@ -28,6 +29,7 @@ class Meals extends StatefulWidget {
 
 class _MealsState extends State<Meals> {
   List<Meal> listMeals = [];
+  List<Meal> listMealsOrigin = [];
   List<Category> listCategories = [];
   Settings settings = Settings();
   List<Meal> favorites = [];
@@ -58,12 +60,18 @@ class _MealsState extends State<Meals> {
   }
 
   void _loadMeals() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+
+    // ignore: unrelated_type_equality_checks
+    if (connectivityResult == ConnectivityResult.none) return;
+
     final data = await fetchMealsAndCategories();
     final List<Category> categories = data['categories'];
     final List<Meal> meals = data['meals'];
 
     setState(() {
       listMeals = meals;
+      listMealsOrigin = meals;
       listCategories = categories;
 
       isLoading = false;
@@ -181,8 +189,9 @@ class _MealsState extends State<Meals> {
   void _filterMeals(Settings settings) {
     setState(() {
       this.settings = settings;
+
       listMeals =
-          listMeals.where((meal) {
+          listMealsOrigin.where((meal) {
             final filterGluten = settings.isGlutenFree && !meal.isGlutenFree;
             final filterLactose = settings.isLactoseFree && !meal.isLactoseFree;
             final filterVegan = settings.isVegan && !meal.isVegan;
